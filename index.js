@@ -32,10 +32,17 @@ app.get('/', (req, res) =>{
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const servicesCollection = client.db("deliveryService").collection("services");
+  const feedbacksCollection = client.db("deliveryService").collection("feedbacks");
   const ordersCollection = client.db("deliveryService").collection("orders");
   
     app.get('/services', (req, res) =>{
       servicesCollection.find({})
+      .toArray( (err, documents) => {
+        res.send(documents);
+      })
+    })
+    app.get('/feedbacks', (req, res) =>{
+      feedbacksCollection.find({})
       .toArray( (err, documents) => {
         res.send(documents);
       })
@@ -51,6 +58,13 @@ client.connect(err => {
     app.post('/addServices', (req, res) =>{
       const book = req.body;
       servicesCollection.insertOne(book)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+    })
+    app.post('/addFeedbacks', (req, res) =>{
+      const book = req.body;
+      feedbacksCollection.insertOne(book)
       .then(result => {
         res.send(result.insertedCount > 0)
       })
