@@ -48,7 +48,7 @@ client.connect(err => {
       })
     })
     
-    app.post('/addService', (req, res) =>{
+    app.post('/addServices', (req, res) =>{
       const book = req.body;
       servicesCollection.insertOne(book)
       .then(result => {
